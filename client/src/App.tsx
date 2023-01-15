@@ -19,7 +19,7 @@ type List = {
 };
 
 const useContent = (contract: ethers.Contract) => {
-    const { listings, ListingCount } = contract.functions;
+    const { listings, ListingCount, purchase } = contract.functions;
     const [listContValue, setListCountValue] = useState<string>("");
     const [ListsValue, setListsValue] = useState<List[]>([]);
 
@@ -41,41 +41,47 @@ const useContent = (contract: ethers.Contract) => {
         getLists();
     }, []);
 
+    // const updateItemIdx = (e: React.ChangeEvent<HTMLInputElement>) =>
+    //     setItemIdx(e.target.value);
+
+    const requestPurchase = async (id: string, value: number) => {
+        for (const _item of ListsValue) {
+            if (id === _item.id) {
+                await purchase(id, { value: value });
+                return;
+            }
+        }
+    };
+
     return {
         listCount: listContValue,
         lists: ListsValue,
-        // updateTaskContent,
-        // requestCreateTask,
-        // requestToggleIsCompleted,
+        requestPurchase,
     };
 };
 
 const Content: FC<ContentProps> = ({ contract }) => {
-    const { listCount, lists } = useContent(contract);
+    const { listCount, lists, requestPurchase } = useContent(contract);
 
     // const handleCreateTask = async () => {
     //     await requestCreateTask();
     //     window.location.reload();
     // };
 
-    // const handleToggleIsCompleted = async (id: string) => {
-    //     await requestToggleIsCompleted(id);
-    //     window.location.reload();
-    // };
+    const handleRequestPurchase = async (id: string, value: number) => {
+        await requestPurchase(id, value);
+        window.location.reload();
+    };
 
     return (
         <div>
-            {/* <p>
-                <input onChange={updateTaskContent} />
-                <button onClick={handleCreateTask}>Create Task</button>
-            </p> */}
-            <div>{`listCount... ${listCount}`}</div>
+            {/* <div>{`listCount... ${listCount}`}</div> */}
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Price</th>
+                        <th>Price [wei]</th>
                         <th>Seller</th>
                     </tr>
                 </thead>
@@ -86,16 +92,18 @@ const Content: FC<ContentProps> = ({ contract }) => {
                             <td>{t.name}</td>
                             <td>{Number(t.price)}</td>
                             <td>{t.seller}</td>
-
-                            {/* <td>
+                            <td>
                                 <button
                                     onClick={() =>
-                                        handleToggleIsCompleted(t.id)
+                                        handleRequestPurchase(
+                                            t.id,
+                                            Number(t.price)
+                                        )
                                     }
                                 >
-                                    Change
+                                    Purchase
                                 </button>
-                            </td> */}
+                            </td>
                         </tr>
                     ))}
                 </tbody>

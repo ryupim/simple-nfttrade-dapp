@@ -53,10 +53,10 @@ const Header: FC<HeaderProps> = ({ signer, provider, contract }) => {
 
     return (
         <>
-            <div>{`Account: ${address}`}</div>
-            <div>{`Balance: ${balance} ETH`}</div>
+            <div>{`Account address : ${address}`}</div>
+            <div>{`Balance : ${balance} ETH`}</div>
             <div>
-                <p>{`Deposit: ${deposit} ETH`}</p>
+                <p>{`Your deposit : ${deposit} ETH`}</p>
                 <button onClick={handleRequestWithdraw}>Withdraw</button>
             </div>
         </>
