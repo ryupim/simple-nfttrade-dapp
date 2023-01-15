@@ -24,7 +24,7 @@ const useContent = (contract: ethers.Contract) => {
     const [ListsValue, setListsValue] = useState<List[]>([]);
 
     const [itemName, setItemName] = useState<string>("");
-    const [itemPrice, setItemPrice] = useState<number>(0);
+    const [itemPrice, setItemPrice] = useState<string>("");
 
     useEffect(() => {
         const getLists = async () => {
@@ -48,9 +48,9 @@ const useContent = (contract: ethers.Contract) => {
         setItemName(e.target.value);
 
     const updateItemPrice = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setItemPrice(Number(e.target.value));
+        setItemPrice(e.target.value);
 
-    const requestPurchase = async (id: string, value: number) => {
+    const requestPurchase = async (id: string, value: string) => {
         for (const _item of ListsValue) {
             if (id === _item.id) {
                 await purchase(id, { value: value });
@@ -60,7 +60,7 @@ const useContent = (contract: ethers.Contract) => {
     };
 
     const requestRegister = async () => {
-        if (itemName === "" || itemPrice === 0) {
+        if (itemName === "" || itemPrice === "") {
             console.log("適切な情報を入力してください。");
             return;
         }
@@ -91,7 +91,7 @@ const Content: FC<ContentProps> = ({ contract }) => {
         window.location.reload();
     };
 
-    const handleRequestPurchase = async (id: string, value: number) => {
+    const handleRequestPurchase = async (id: string, value: string) => {
         await requestPurchase(id, value);
         window.location.reload();
     };
@@ -120,14 +120,14 @@ const Content: FC<ContentProps> = ({ contract }) => {
                         <tr key={`task.${index}`}>
                             <td>{t.id}</td>
                             <td>{t.name}</td>
-                            <td>{Number(t.price)}</td>
+                            <td>{t.price.toString()}</td>
                             <td>{t.seller}</td>
                             <td>
                                 <button
                                     onClick={() =>
                                         handleRequestPurchase(
                                             t.id,
-                                            Number(t.price)
+                                            t.price.toString()
                                         )
                                     }
                                 >

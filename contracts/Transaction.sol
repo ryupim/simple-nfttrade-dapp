@@ -4,10 +4,7 @@ pragma solidity ^0.8.0;
 // import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract Transaction {
-    // address deployer;
-    // address public holder;
-    // address payable public beneficiary;
-
+    
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256) public balances;
     uint256 public ListingCount = 0;
@@ -43,20 +40,9 @@ contract Transaction {
         balances[msg.sender] -= value;
     }
 
-    function get(uint256 idx) public view returns (uint256) {
-        return listings[idx].price;
-    }
 
-
-    // function upload(uint _price) public {
-
-    // }
 
     // function changePrice() public {
-
-    // }
-
-    // function request() public {
 
     // }
 
