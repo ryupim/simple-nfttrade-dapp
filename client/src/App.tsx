@@ -3,8 +3,8 @@ import './App.css';
 import { ethers } from 'ethers';
 import React, { FC, useEffect, useState } from 'react';
 
-// import artifact from './abi/TodoList.json';
 import artifact from './abi/Transaction.json';
+import config from './client_config';
 import Header from './components/Header';
 
 type ContentProps = {
@@ -104,7 +104,8 @@ const Content: FC<ContentProps> = ({ contract }) => {
     );
 };
 
-const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+const contractAddress = config.contract_address || "";
+console.log("contractAddress", contractAddress);
 
 function App() {
     const provider = new ethers.providers.JsonRpcProvider();
@@ -123,11 +124,11 @@ function App() {
     return (
         <div>
             <h1>Market Place</h1>
-            {/* <Header signer={signer} /> */}
             {/* ここでアカウントを使った処理をする */}
+            <Header signer={signer} provider={provider} />
 
-            <Content contract={contract} />
-            {/* <Content contract={contractWithSigner} /> */}
+            {/* <Content contract={contract} /> */}
+            <Content contract={contractWithSigner} />
         </div>
     );
 }
