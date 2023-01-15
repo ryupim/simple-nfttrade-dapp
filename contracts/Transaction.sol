@@ -28,8 +28,9 @@ contract Transaction {
     }
 
     function purchase(uint256 idx) public payable {
-        Listing memory item = listings[idx];
-        require(msg.value >= item.price, "insufficient funds sent");
+        Listing storage item = listings[idx];
+        require(msg.sender != item.seller, "buyer & seller are equal");
+        require(msg.value == item.price, "price & funds are not equal");
         balances[item.seller] += msg.value;
         item.seller = msg.sender;
     }

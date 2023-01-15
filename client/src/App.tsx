@@ -19,9 +19,12 @@ type List = {
 };
 
 const useContent = (contract: ethers.Contract) => {
-    const { listings, ListingCount, purchase } = contract.functions;
+    const { listings, ListingCount, purchase, register } = contract.functions;
     const [listContValue, setListCountValue] = useState<string>("");
     const [ListsValue, setListsValue] = useState<List[]>([]);
+
+    const [itemName, setItemName] = useState<string>("");
+    const [itemPrice, setItemPrice] = useState<number>(0);
 
     useEffect(() => {
         const getLists = async () => {
@@ -41,8 +44,11 @@ const useContent = (contract: ethers.Contract) => {
         getLists();
     }, []);
 
-    // const updateItemIdx = (e: React.ChangeEvent<HTMLInputElement>) =>
-    //     setItemIdx(e.target.value);
+    const updateItemName = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setItemName(e.target.value);
+
+    const updateItemPrice = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setItemPrice(Number(e.target.value));
 
     const requestPurchase = async (id: string, value: number) => {
         for (const _item of ListsValue) {
@@ -53,20 +59,37 @@ const useContent = (contract: ethers.Contract) => {
         }
     };
 
+    const requestRegister = async () => {
+        if (itemName === "" || itemPrice === 0) {
+            console.log("適切な情報を入力してください。");
+            return;
+        }
+        await register(itemName, itemPrice);
+    };
+
     return {
         listCount: listContValue,
         lists: ListsValue,
         requestPurchase,
+        requestRegister,
+        updateItemName,
+        updateItemPrice,
     };
 };
 
 const Content: FC<ContentProps> = ({ contract }) => {
-    const { listCount, lists, requestPurchase } = useContent(contract);
+    const {
+        lists,
+        requestPurchase,
+        requestRegister,
+        updateItemName,
+        updateItemPrice,
+    } = useContent(contract);
 
-    // const handleCreateTask = async () => {
-    //     await requestCreateTask();
-    //     window.location.reload();
-    // };
+    const handleRegister = async () => {
+        await requestRegister();
+        window.location.reload();
+    };
 
     const handleRequestPurchase = async (id: string, value: number) => {
         await requestPurchase(id, value);
@@ -75,7 +98,14 @@ const Content: FC<ContentProps> = ({ contract }) => {
 
     return (
         <div>
-            {/* <div>{`listCount... ${listCount}`}</div> */}
+            <div>
+                <h2>Register Item</h2>
+                <input onChange={updateItemName} />
+                <> </>
+                <input onChange={updateItemPrice} />
+                <button onClick={handleRegister}>Register</button>
+            </div>
+            <h2>Item List</h2>
             <table>
                 <thead>
                     <tr>
