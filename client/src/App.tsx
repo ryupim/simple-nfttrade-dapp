@@ -125,7 +125,11 @@ function App() {
         <div>
             <h1>Market Place</h1>
             {/* ここでアカウントを使った処理をする */}
-            <Header signer={signer} provider={provider} />
+            <Header
+                signer={signer}
+                provider={provider}
+                contract={contractWithSigner}
+            />
 
             {/* <Content contract={contract} /> */}
             <Content contract={contractWithSigner} />
