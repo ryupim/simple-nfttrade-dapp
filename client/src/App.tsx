@@ -146,10 +146,10 @@ const contractAddress = config.contract_address || "";
 console.log("contractAddress", contractAddress);
 
 function App() {
-    const provider = new ethers.providers.JsonRpcProvider();
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //     "http://localhost:7545"
-    // );
+    // const provider = new ethers.providers.JsonRpcProvider();
+    const provider = new ethers.providers.JsonRpcProvider(
+        "http://localhost:8545"
+    );
     const signer = provider.getSigner();
 
     const contract: ethers.Contract = new ethers.Contract(
