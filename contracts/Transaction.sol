@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 
 contract Transaction {
     event Register(uint id, string name, uint256 price);
-    event Purchase(uint id, string name, address buyer);
+    event Buy(uint id, string name, address buyer);
     event Withdraw(address _address, uint value);
 
     mapping(uint256 => Listing) public listings;
@@ -28,13 +28,13 @@ contract Transaction {
         emit Register(ListingCount, _name, _price);
     }
 
-    function purchase(uint256 idx) public payable {
+    function buy(uint256 idx) public payable {
         Listing storage item = listings[idx];
         require(msg.sender != item.seller, "buyer & seller are equal");
         require(msg.value == item.price, "price & funds are not equal");
         balances[item.seller] += msg.value;
         item.seller = msg.sender;
-        emit Purchase(idx, item.name, msg.sender);
+        emit Buy(idx, item.name, msg.sender);
     }
 
     function withdraw() public {
