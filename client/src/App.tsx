@@ -146,17 +146,39 @@ const contractAddress = config.contract_address || "";
 console.log("contractAddress", contractAddress);
 
 function App() {
+    const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner>();
+
     // const provider = new ethers.providers.JsonRpcProvider();
-    const provider = new ethers.providers.JsonRpcProvider(
-        "http://localhost:8545"
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //     "http://localhost:8545"
+    // );
+    const provider = new ethers.providers.Web3Provider(
+        (window as any).ethereum,
+        "any"
     );
-    const signer = provider.getSigner();
+
+    useEffect(() => {
+        const authMetamask = async () => {
+            await provider.send("eth_requestAccounts", []);
+            const _signer = provider.getSigner();
+            if (_signer) {
+                setSigner(_signer);
+            } else {
+                console.error("undefiend signer");
+            }
+        };
+        authMetamask();
+    }, []);
 
     const contract: ethers.Contract = new ethers.Contract(
         contractAddress,
         artifact.abi,
         provider
     );
+    console.log("signer", signer);
+    if (!signer) {
+        return <div>Loading...</div>;
+    }
     const contractWithSigner = contract.connect(signer);
 
     return (
