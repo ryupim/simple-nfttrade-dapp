@@ -1,6 +1,8 @@
 import { ethers } from 'ethers';
 import React, { FC, useEffect, useState } from 'react';
 
+import { Button } from '@mui/material';
+
 type HeaderProps = {
     signer: ethers.providers.JsonRpcSigner;
     provider: ethers.providers.JsonRpcProvider;
@@ -58,7 +60,7 @@ const Header: FC<HeaderProps> = ({ signer, provider, contract }) => {
             <div>{`Balance : ${balance} ETH`}</div>
             <div>
                 <p>{`Amount of sales : ${deposit} wei`}</p>
-                <button onClick={handleRequestWithdraw}>Withdraw</button>
+                <Button onClick={handleRequestWithdraw}>Withdraw</Button>
             </div>
         </>
     );

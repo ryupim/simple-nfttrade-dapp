@@ -3,6 +3,8 @@ import './App.css';
 import { ethers } from 'ethers';
 import React, { FC, useEffect, useState } from 'react';
 
+import { Box, Button, TextField } from '@mui/material';
+
 import artifact from './abi/Transaction.json';
 import config from './client_config';
 import Header from './components/Header';
@@ -100,10 +102,23 @@ const Content: FC<ContentProps> = ({ contract }) => {
         <div>
             <div>
                 <h2>Register Item</h2>
-                <input onChange={updateItemName} />
-                <> </>
-                <input onChange={updateItemPrice} />
-                <button onClick={handleRegister}>Register</button>
+                <Box>
+                    <TextField
+                        id="filled-basic"
+                        label="Name"
+                        variant="filled"
+                        onChange={updateItemName}
+                    />
+                    <TextField
+                        id="filled-basic"
+                        label="Price [wei]"
+                        variant="filled"
+                        onChange={updateItemPrice}
+                    />
+                    <Box>
+                        <Button onClick={handleRegister}>Register</Button>
+                    </Box>
+                </Box>
             </div>
             <h2>Item List</h2>
             <table>
@@ -123,7 +138,8 @@ const Content: FC<ContentProps> = ({ contract }) => {
                             <td>{t.price.toString()}</td>
                             <td>{t.seller}</td>
                             <td>
-                                <button
+                                <Button
+                                    variant="contained"
                                     onClick={() =>
                                         handleRequestPurchase(
                                             t.id,
@@ -132,7 +148,7 @@ const Content: FC<ContentProps> = ({ contract }) => {
                                     }
                                 >
                                     Purchase
-                                </button>
+                                </Button>
                             </td>
                         </tr>
                     ))}
